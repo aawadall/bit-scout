@@ -11,23 +11,26 @@
 
 ## 🧪 Alpha (Weeks 1–4)
 
-🎯 Goal: Validate core trie + inverted index with token expansion.
+🎯 Goal: Validate core trie + inverted index with token expansion and introduce Boolean search model.
 
 ✅ Features
-- [ ] Corpus loader & tokenizer
+- [ ] Corpus loader 
+- [ ] Tokenizer
 - [ ] Token expansion (typos, stems, translits)
 - [ ] Inverted index
 - [ ] Trie for next-token prediction
+- [ ] Boolean search model (AND, OR, NOT queries)
 - [ ] Basic scorer (weighted source signals)
 - [ ] CLI search tool
 - [ ] Index snapshot + load from disk
 - [ ] Sample test corpus
+- [ ] Pluggable persistence interface (filesystem, BoltDB)
 
 ---
 
 ## 🛠️ Beta (Weeks 5–10)
 
-🎯 Goal: Multi-node architecture with gRPC query serving.
+🎯 Goal: Multi-node architecture with gRPC query serving and expand search models.
 
 ✅ Features
 - [ ] gRPC server for search queries
@@ -36,6 +39,9 @@
 - [ ] Redis optional cache layer
 - [ ] Trie hydration via RPC or shared volume
 - [ ] Trie pruning and compression
+- [ ] Vector Space search model
+- [ ] BM25 ranking model
+- [ ] Plugin architecture for additional persistence backends
 
 ---
 
@@ -62,6 +68,7 @@
 - [ ] Docs + API spec
 - [ ] Scalable embedding support (optional)
 - [ ] Embeddable as a Go module
+- [ ] Mature plugin ecosystem for models and persistence
 
 ---
 

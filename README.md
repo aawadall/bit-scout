@@ -1,6 +1,6 @@
 # bit-scout
 
-**bit-scout** is a fast, modular search engine focused on typeahead, token-based matching, and trie-based prediction — built in Go with future plans for clustering and optional ML-based fallback.
+**bit-scout** is a fast, modular search engine focused on typeahead, token-based matching, and trie-based prediction — built in Go with future plans for clustering, advanced ranking models, and optional ML-based fallback.
 
 > 🧪 Alpha: This is a single-node prototype with offline indexing and in-memory querying via CLI.
 
@@ -8,11 +8,12 @@
 
 ## 🌟 Features
 
+- Boolean, Vector Space, and BM25 search models (modular, pluggable)
 - Trie-based prefix prediction
 - Inverted index for token lookup
 - Token expansion: stemming, typos, transliteration
 - Offline corpus ingestion and index building
-- In-memory or BoltDB-backed persistence (WIP)
+- In-memory or pluggable persistence (filesystem, BoltDB, and more via plugin architecture)
 - Simple CLI search interface
 
 ---
@@ -25,7 +26,9 @@ Modern search systems (e.g., Lucene, ElasticSearch) are powerful but heavyweight
 - Trie + inverted index hybrid architecture
 - Fast suggestions and typeahead use cases
 - Clean separation of scoring, expansion, and retrieval
+- Modular search models (Boolean, Vector, BM25)
 - Optional fallback for semantic or ML-based suggestions
+- Pluggable persistence for different storage backends
 
 ---
 
