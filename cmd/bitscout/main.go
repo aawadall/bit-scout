@@ -11,7 +11,7 @@ func main() {
 	registry := corpus.NewLoaderRegistry()
 	registry.Register("filesystem", corpus.NewFilesystemLoader("."))
 
-	documents, err := registry.LoadAll("filesystem")
+	documents, err := registry.LoadAll()
 	if err != nil {
 		log.Error().Msgf("Error loading documents: %s", err)
 		return

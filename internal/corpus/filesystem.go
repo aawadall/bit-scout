@@ -23,8 +23,8 @@ func NewFilesystemLoader(root string) *FilesystemLoader {
 	return &FilesystemLoader{root: root}
 }
 
-func (l *FilesystemLoader) Load(source string) ([]Document, error) {
-	log.Info().Msgf("FilesystemLoader.Load: %s", source)
+func (l *FilesystemLoader) Load() ([]Document, error) {
+	log.Info().Msgf("FilesystemLoader.Load from %s", l.root)
 	documents := []Document{}
 
 	err := filepath.Walk(l.root, func(path string, info os.FileInfo, err error) error {
