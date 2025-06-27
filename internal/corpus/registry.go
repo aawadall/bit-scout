@@ -37,18 +37,19 @@ func (r *LoaderRegistry) List() []string {
 	return names
 }
 
-// Load All
-func (r *LoaderRegistry) LoadAll(source string) ([]Document, error) {
-	loader, ok := r.Get(source)
-	if !ok {
-		err := fmt.Errorf("loader not found: %s", source)
-		log.Error().Msgf("LoadAll: %s", err)
-		return nil, err
+// LoadAll iterates over all registered loaders, calls Load on each with the provided source, and aggregates the results.
+func (r *LoaderRegistry) LoadAll() ([]Document, error) {
+	var allDocs []Document
+	for name, loader := range r.loaders {
+		docs, err := loader.Load()
+		if err != nil {
+			log.Error().Msgf("LoadAll: loader '%s' failed: %s", name, err)
+			continue // skip this loader, but continue with others
+		}
+		allDocs = append(allDocs, docs...)
 	}
-	documents, err := loader.Load(source)
-	if err != nil {
-		log.Error().Msgf("LoadAll: %s", err)
-		return nil, err
+	if len(allDocs) == 0 {
+		return nil, fmt.Errorf("no documents loaded from any loader")
 	}
-	return documents, nil
+	return allDocs, nil
 }
