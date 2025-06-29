@@ -1,6 +1,9 @@
 package corpus
 
-import "github.com/rs/zerolog/log"
+import (
+	"fmt"
+	"strconv"
+)
 
 // Document represents a single document loaded from a corpus source.
 type Document struct {
@@ -13,11 +16,18 @@ type Document struct {
 
 // Print the document
 func (d *Document) Print() {
-	log.Info().Msgf("Document ID: %s", d.ID)
-	log.Info().Msgf("Document Text: %s", d.Text)
-	log.Info().Msgf("Document Source: %s", d.Source)
-	log.Info().Msgf("Document Metadata:")
-	for key, value := range d.Meta {
-		log.Info().Msgf("  %s: %s", key, value)
+	printedBlob := "\n\n\n"
+	printedBlob += "Document ID: " + d.ID + "\n"
+	//printedBlob += "Document Text: " + d.Text + "\n"
+	printedBlob += "Document Source: " + d.Source + "\n"
+	// print vector
+	printedBlob += "Document Vector:\n"
+	for _, value := range d.Vector {
+		printedBlob += "  " + strconv.FormatFloat(value, 'f', -1, 64) + "\n"
 	}
+	printedBlob += "Document Metadata:\n"
+	for key, value := range d.Meta {
+		printedBlob += "  " + key + ": " + value + "\n"
+	}
+	fmt.Print(printedBlob)
 }
