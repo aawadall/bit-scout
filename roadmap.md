@@ -14,7 +14,16 @@
 🎯 Goal: Validate core trie + inverted index with token expansion and introduce Boolean search model.
 
 ✅ Features
-- [ ] Corpus loader 
+- [x] Corpus loader interface
+- [x] Filesystem loader
+- [x] Loader registry
+- [ ] Document features extraction
+- [ ] Document vectorization
+- [ ] Document embedding
+- [ ] Document similarity
+- [ ] Document clustering
+- [ ] Document classification
+- [ ] Document summarization
 - [ ] Tokenizer
 - [ ] Token expansion (typos, stems, translits)
 - [ ] Inverted index
