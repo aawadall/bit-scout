@@ -1,8 +1,8 @@
-package corpus
+package loaders
 
 import (
 	"fmt"
-
+	"github.com/aawadall/bit-scout/internal/models"
 	"github.com/rs/zerolog/log"
 )
 
@@ -38,8 +38,8 @@ func (r *LoaderRegistry) List() []string {
 }
 
 // LoadAll iterates over all registered loaders, calls Load on each with the provided source, and aggregates the results.
-func (r *LoaderRegistry) LoadAll() ([]Document, error) {
-	var allDocs []Document
+func (r *LoaderRegistry) LoadAll() ([]models.Document, error) {
+	var allDocs []models.Document
 	for name, loader := range r.loaders {
 		docs, err := loader.Load()
 		if err != nil {

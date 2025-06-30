@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/aawadall/bit-scout/internal/corpus"
+	"github.com/aawadall/bit-scout/internal/loaders"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	log.Info().Msg("Starting bitscout")
 
-	registry := corpus.NewLoaderRegistry()
-	registry.Register("filesystem", corpus.NewFilesystemLoader("."))
+	registry := loaders.NewLoaderRegistry()
+	registry.Register("filesystem", loaders.NewFilesystemLoader("."))
 
 	documents, err := registry.LoadAll()
 	if err != nil {
