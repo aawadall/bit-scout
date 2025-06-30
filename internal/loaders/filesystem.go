@@ -1,4 +1,4 @@
-package corpus
+package loaders
 
 /*
 Implementation of corpus loader for filesystem.
@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/aawadall/bit-scout/internal/models"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )
@@ -31,9 +32,9 @@ func NewFilesystemLoader(root string) *FilesystemLoader {
 	return &FilesystemLoader{root: root}
 }
 
-func (l *FilesystemLoader) Load() ([]Document, error) {
+func (l *FilesystemLoader) Load() ([]models.Document, error) {
 	log.Info().Msgf("FilesystemLoader.Load from %s", l.root)
-	documents := []Document{}
+	documents := []models.Document{}
 
 	err := filepath.Walk(l.root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -54,7 +55,7 @@ func (l *FilesystemLoader) Load() ([]Document, error) {
 
 		log.Info().Msgf("FilesystemLoader.Load: adding document: %s", path)
 
-		documents = append(documents, Document{
+		documents = append(documents, models.Document{
 			ID:     makeID(path),
 			Text:   string(content),
 			Source: path,
