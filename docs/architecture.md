@@ -4,44 +4,88 @@
 
 ---
 
-## 🧱 Core Components (Alpha)
+## 🧱 Core Components
 
-### 1. **Corpus Parser**
+### ✅ Implemented (Alpha)
 
-* Reads raw queries or titles from a file.
-* Tokenizes, lowercases, and normalizes them.
+#### 1. **Document Loading System**
+* **Corpus Loader Interface**: Pluggable interface for loading documents from different sources
+* **Loader Registry**: Manages multiple loader implementations
+* **Filesystem Loader**: Loads documents from filesystem with rich metadata extraction
+* **Document Model**: Rich document representation with ID, text, source, vector, and metadata
 
-### 2. **Token Expander**
+#### 2. **Basic Vectorization**
+* Simple vector generation based on file characteristics:
+  * File size (normalized)
+  * Last modification time (normalized)
+* Extensible for more sophisticated vectorization
 
+#### 3. **Search Engine Core**
+* **Simple Index**: In-memory document storage with fast lookup
+* **Query Parser**: Advanced boolean query parsing with dimension filtering
+* **Search Interface**: Both simple text search and advanced boolean queries
+* **Index Statistics**: Document count and size tracking
+
+#### 4. **CLI Interface**
+* Interactive search interface with command-line prompts
+* Document loading and display functionality
+* Metadata and vector visualization
+* Configuration display and help system
+
+### 🚧 Planned Components (Alpha)
+
+#### 5. **Corpus Parser**
+* Reads raw queries or titles from loaded documents
+* Tokenizes, lowercases, and normalizes them
+
+#### 6. **Token Expander**
 * Applies optional transformations:
-
   * Typo correction
   * Stemming
   * Transliteration
-* Produces a set of variant tokens per input token.
+* Produces a set of variant tokens per input token
 
-### 3. **Inverted Index**
+#### 7. **Advanced Inverted Index**
+* Maps expanded tokens → candidate queries
+* Stored in memory or embedded KV store (e.g., BoltDB)
+* Optimized for fast token lookup
 
-* Maps expanded tokens → candidate queries.
-* Stored in memory or embedded KV store (e.g., BoltDB).
+#### 8. **Trie Structure**
+* Built from token sequences in the corpus
+* Supports prefix-based next-token prediction
+* Fast lookup during query time
 
-### 4. **Trie Structure**
-
-* Built from token sequences in the corpus.
-* Supports prefix-based next-token prediction.
-* Fast lookup during query time.
-
-### 5. **Scoring Engine**
-
+#### 9. **Advanced Scoring Engine**
 * Computes a score for each candidate based on:
-
   * Match type (exact, stemmed, typo)
   * Token frequency or custom weights (future)
-* Returns top-k ranked suggestions.
+  * Vector similarity (future)
+* Returns top-k ranked suggestions
 
 ---
 
-## 🔄 Offline Indexing Flow
+## 🔄 Current Search Flow
+
+```mermaid
+flowchart TD
+    A[Filesystem] --> B[FilesystemLoader]
+    B --> C[Document Creation]
+    C --> D[Metadata Extraction]
+    C --> E[Vector Generation]
+    D --> F[Simple Index]
+    E --> F
+    F --> G[Interactive CLI]
+    G --> H{Query Type}
+    H -->|Simple| I[Text Search]
+    H -->|Advanced| J[Query Parser]
+    J --> K[Boolean Evaluation]
+    I --> L[Results Display]
+    K --> L
+```
+
+---
+
+## 🔄 Planned Offline Indexing Flow
 
 ```mermaid
 flowchart TD
@@ -55,7 +99,7 @@ flowchart TD
 
 ---
 
-## 🔍 Query-Time Flow (CLI / API)
+## 🔍 Planned Query-Time Flow (CLI / API)
 
 ```mermaid
 flowchart TD
@@ -79,15 +123,25 @@ flowchart TD
 
 ---
 
-## 📁 File Layout (Alpha)
+## 📁 File Layout
 
+### ✅ Implemented
 | Path                           | Purpose                      |
 | ------------------------------ | ---------------------------- |
-| `internal/corpus/`             | Tokenizer + loader           |
+| `internal/loaders/loader.go`   | Corpus loader interface      |
+| `internal/loaders/registry.go` | Loader registry management   |
+| `internal/loaders/filesystem.go` | Filesystem document loader  |
+| `internal/models/document.go`  | Document model & metadata    |
+| `internal/index/index.go`      | Index interface              |
+| `internal/index/simple.go`     | Simple in-memory index       |
+| `internal/index/query.go`      | Advanced query parser        |
+| `cmd/bitscout/main.go`         | Interactive CLI app          |
+
+### 🚧 Planned
+| Path                           | Purpose                      |
+| ------------------------------ | ---------------------------- |
 | `internal/engine/trie.go`      | Trie structure & search      |
-| `internal/engine/index.go`     | Inverted index & lookup      |
 | `internal/engine/expansion.go` | Typo/stem/translit expansion |
-| `cmd/bitscout/main.go`         | CLI app                      |
 | `scripts/build_index.go`       | Index builder (offline)      |
 
 ---
