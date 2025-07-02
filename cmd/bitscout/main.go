@@ -98,6 +98,11 @@ func startInteractiveSearch(idx index.Index) {
 			continue
 		}
 
+		// Complex Queries
+		if query == "complex" {
+			interactiveComplexQuery(idx)
+			continue
+		}
 		// Perform search
 		results, err := idx.Search(query)
 		if err != nil {
@@ -114,6 +119,7 @@ func startInteractiveSearch(idx index.Index) {
 func printHelp() {
 	fmt.Println("\nAvailable commands:")
 	fmt.Println("  <query>     - Search for documents containing the query")
+	fmt.Println("  complex     - Interactive complex query builder")
 	fmt.Println("  config      - Show current index configuration")
 	fmt.Println("  help        - Show this help message")
 	fmt.Println("  quit/exit   - Exit the application")
@@ -176,4 +182,96 @@ func displaySearchResults(results []models.Document, query string) {
 		fmt.Printf("   Extension: %s\n", doc.Meta["extension"])
 		fmt.Println()
 	}
+}
+
+// Interactive Complex Query
+// REPL for complex queries
+// Takes arguments until special token is sent 
+func interactiveComplexQuery(idx index.Index) {
+	reader := bufio.NewReader(os.Stdin)
+
+	// Display intro and quick help
+	fmt.Println("\n=== Complex Query Interface ===")
+	fmt.Println("Given the following dimensions, operators, and logic operators, build a query to search the index.")
+	fmt.Println("When done, type ## and enter to submit your query.")
+	fmt.Println("Enter 'help' to display available dimensions, operators, and logic operators")
+	fmt.Println("Enter 'quit' to exit")
+		
+	// Display available dimensions
+	dimensions, err := idx.ShowConfig()
+	if err != nil {
+		log.Error().Msgf("Error getting index config: %s", err)
+		fmt.Printf("Error getting index configuration: %s\n", err)
+		return
+	}
+	
+	// Display available dimensions
+	fmt.Println("\nAvailable dimensions:")
+	for _, dimension := range dimensions {
+		fmt.Printf("  %s\n", dimension)
+	}
+	
+	
+	// display available operators
+	fmt.Println("\nAvailable operators:")
+	fmt.Println("  =           - equals (e.g., fileExtension=go)")
+	fmt.Println("  !=          - not equals (e.g., fileExtension!=md)")
+	fmt.Println("  <, <=       - less than, less than or equal")
+	fmt.Println("  >, >=       - greater than, greater than or equal")
+	fmt.Println("  contains    - contains text (e.g., filename contains main)")
+	
+	// display available logic operators
+	fmt.Println("\nAvailable logic operators:")
+	fmt.Println("  and         - logical AND")
+	fmt.Println("  or          - logical OR")
+	fmt.Println("  not         - logical NOT")
+	
+	// display available query types
+	fmt.Println("\nAvailable query types:")
+	fmt.Println("  simple      - simple text search")
+
+	// Initialize query state
+	query := ""
+	queryParts := []string{}
+	
+	
+	// REPL loop
+	for {
+		fmt.Print("> ")
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			log.Error().Msgf("Error reading input: %s", err)
+			break
+		}
+
+		input = strings.TrimSpace(input)
+		if input == "quit" || input == "exit" {
+			fmt.Println("Goodbye!")
+			break
+		}
+
+		if input == "help" {
+			printHelp()
+			continue
+		}
+		
+	
+		if input == "##" {
+			// submit query
+			results, err := idx.Search(query)
+			if err != nil {
+				log.Error().Msgf("Error searching: %s", err)
+				fmt.Printf("Error searching: %s\n", err)
+				continue
+			}
+			displaySearchResults(results, query)
+			break
+		}
+
+		// Add input to query parts
+		queryParts = append(queryParts, input)
+		query = strings.Join(queryParts, " ")
+		fmt.Printf("Current query: %s\n", query)
+	}
+	
 }
