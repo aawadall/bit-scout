@@ -3,6 +3,7 @@ package loaders
 import (
 	"github.com/aawadall/bit-scout/internal/models"
 )
+
 /*
 Interface for corpus loader, and registry of loaders.
 */
