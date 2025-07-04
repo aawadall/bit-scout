@@ -198,4 +198,3 @@ func demonstrateFirstTimeCreation() {
 
 	fmt.Println("First-time database creation completed successfully!")
 }
-
