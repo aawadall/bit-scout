@@ -186,7 +186,7 @@ func displaySearchResults(results []models.Document, query string) {
 
 // Interactive Complex Query
 // REPL for complex queries
-// Takes arguments until special token is sent 
+// Takes arguments until special token is sent
 func interactiveComplexQuery(idx index.Index) {
 	reader := bufio.NewReader(os.Stdin)
 
@@ -196,7 +196,7 @@ func interactiveComplexQuery(idx index.Index) {
 	fmt.Println("When done, type ## and enter to submit your query.")
 	fmt.Println("Enter 'help' to display available dimensions, operators, and logic operators")
 	fmt.Println("Enter 'quit' to exit")
-		
+
 	// Display available dimensions
 	dimensions, err := idx.ShowConfig()
 	if err != nil {
@@ -204,14 +204,13 @@ func interactiveComplexQuery(idx index.Index) {
 		fmt.Printf("Error getting index configuration: %s\n", err)
 		return
 	}
-	
+
 	// Display available dimensions
 	fmt.Println("\nAvailable dimensions:")
 	for _, dimension := range dimensions {
 		fmt.Printf("  %s\n", dimension)
 	}
-	
-	
+
 	// display available operators
 	fmt.Println("\nAvailable operators:")
 	fmt.Println("  =           - equals (e.g., fileExtension=go)")
@@ -219,13 +218,13 @@ func interactiveComplexQuery(idx index.Index) {
 	fmt.Println("  <, <=       - less than, less than or equal")
 	fmt.Println("  >, >=       - greater than, greater than or equal")
 	fmt.Println("  contains    - contains text (e.g., filename contains main)")
-	
+
 	// display available logic operators
 	fmt.Println("\nAvailable logic operators:")
 	fmt.Println("  and         - logical AND")
 	fmt.Println("  or          - logical OR")
 	fmt.Println("  not         - logical NOT")
-	
+
 	// display available query types
 	fmt.Println("\nAvailable query types:")
 	fmt.Println("  simple      - simple text search")
@@ -233,8 +232,7 @@ func interactiveComplexQuery(idx index.Index) {
 	// Initialize query state
 	query := ""
 	queryParts := []string{}
-	
-	
+
 	// REPL loop
 	for {
 		fmt.Print("> ")
@@ -254,8 +252,7 @@ func interactiveComplexQuery(idx index.Index) {
 			printHelp()
 			continue
 		}
-		
-	
+
 		if input == "##" {
 			// submit query
 			results, err := idx.Search(query)
@@ -273,5 +270,5 @@ func interactiveComplexQuery(idx index.Index) {
 		query = strings.Join(queryParts, " ")
 		fmt.Printf("Current query: %s\n", query)
 	}
-	
+
 }
