@@ -200,6 +200,7 @@ func demonstrateFirstTimeCreation() {
 }
 
 // Helper function to demonstrate manual loading
+// lint:ignore U1000 This function is kept for documentation/example purposes
 func demonstrateManualLoading() {
 	fmt.Println("\n=== Manual Loading Example ===")
 
