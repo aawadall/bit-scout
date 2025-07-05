@@ -65,28 +65,44 @@ func (e *FilesystemExtractor) Extract(doc models.Document) (*FeatureSet, error) 
 
 	features := make(map[string]Feature)
 
-	// Extract basic file information
-	features["filename"] = Feature{
-		Name:   "filename",
-		Value:  info.Name(),
-		Type:   "string",
-		Weight: e.config.Weight,
+	// Define feature descriptors
+	featureDescriptors := []struct {
+		Name  string
+		Type  string
+		Value func() string
+	}{
+		{
+			Name: "filename",
+			Type: "string",
+			Value: func() string {
+				return info.Name()
+			},
+		},
+		{
+			Name: "extension",
+			Type: "string",
+			Value: func() string {
+				return filepath.Ext(info.Name())
+			},
+		},
+		{
+			Name: "path",
+			Type: "string",
+			Value: func() string {
+				return doc.Source
+			},
+		},
 	}
 
-	features["extension"] = Feature{
-		Name:   "extension",
-		Value:  filepath.Ext(info.Name()),
-		Type:   "string",
-		Weight: e.config.Weight,
+	// Extract features using descriptors
+	for _, descriptor := range featureDescriptors {
+		features[descriptor.Name] = Feature{
+			Name:   descriptor.Name,
+			Value:  descriptor.Value(),
+			Type:   descriptor.Type,
+			Weight: e.config.Weight,
+		}
 	}
-
-	features["path"] = Feature{
-		Name:   "path",
-		Value:  doc.Source,
-		Type:   "string",
-		Weight: e.config.Weight,
-	}
-
 	features["directory"] = Feature{
 		Name:   "directory",
 		Value:  filepath.Dir(doc.Source),
