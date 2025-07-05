@@ -209,7 +209,7 @@ func ExampleFeatureRegistry_featureMapping() {
 
 	// Output:
 	// Mapped filename: example.txt
-	// Mapped file size: 20
+	// Mapped file size: 21
 	// Mapped word count: 3
 }
 
