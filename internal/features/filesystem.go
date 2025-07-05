@@ -243,7 +243,7 @@ func (e *FilesystemExtractor) Extract(doc models.Document) (*FeatureSet, error) 
 	}
 
 	// Extract path depth
-	pathDepth := len(strings.Split(filepath.Clean(doc.Source), string(filepath.Separator)))
+	pathDepth := strings.Count(filepath.Clean(doc.Source), string(filepath.Separator)) + 1
 	features["path_depth"] = Feature{
 		Name:   "path_depth",
 		Value:  pathDepth,
