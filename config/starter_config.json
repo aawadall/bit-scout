@@ -1,0 +1,30 @@
+{
+  "indexes": [
+    {
+      "name": "simple",
+      "type": "SimpleIndex",
+      "config": {
+        "max_results": 10,
+        "dimensions": ["fileSize", "lastModified", "fileExtension"]
+      }
+    }
+  ],
+  "loaders": [
+    {
+      "name": "filesystem",
+      "type": "FilesystemLoader",
+      "config": {
+        "root": "."
+      }
+    }
+  ],
+  "apis": [
+    {
+      "name": "graphql",
+      "type": "GraphQL",
+      "config": {
+        "listen": ":8080"
+      }
+    }
+  ]
+} 

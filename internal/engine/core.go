@@ -1,9 +1,9 @@
 package engine
 
-
-import  (
+import (
 	"github.com/aawadall/bit-scout/internal/ports"
 )
+
 /**
  * Search Engine - Core
  **/
@@ -28,15 +28,18 @@ type EngineCore struct {
 
 	// Cluster management port (optional, for future extension)
 	clusterManager ports.ClusterManagerPort
+
+	// API port (only one supported for now)
+	api ports.APIPort
 }
 
 // NewEngineCore creates a new EngineCore with empty registries.
 func NewEngineCore() *EngineCore {
 	return &EngineCore{
-		indexes:          make(map[string]ports.IndexPort),
-		loaders:          make(map[string]ports.LoaderPort),
-		configs:          make(map[string]ports.ConfigPort),
-		persistence:      make(map[string]ports.PersistencePort),
+		indexes:           make(map[string]ports.IndexPort),
+		loaders:           make(map[string]ports.LoaderPort),
+		configs:           make(map[string]ports.ConfigPort),
+		persistence:       make(map[string]ports.PersistencePort),
 		featureExtractors: make(map[string]ports.FeatureExtractorPort),
 	}
 }
@@ -69,4 +72,9 @@ func (e *EngineCore) RegisterFeatureExtractor(name string, extractor ports.Featu
 // SetClusterManager sets the cluster manager adapter.
 func (e *EngineCore) SetClusterManager(manager ports.ClusterManagerPort) {
 	e.clusterManager = manager
+}
+
+// RegisterAPI registers an API adapter (only one supported for now)
+func (e *EngineCore) RegisterAPI(api ports.APIPort) {
+	e.api = api
 }
