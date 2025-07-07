@@ -69,13 +69,29 @@ func (a *filesystemLoaderAdapter) Load(source string) ([]interface{}, error) {
 	return out, nil
 }
 
+// LoaderConfig represents a loader configuration from the starter config
+// Example: { "name": "filesystem", "type": "FilesystemLoader", "config": { "root": "." } }
+type LoaderConfig struct {
+	Name   string                 `json:"name"`
+	Type   string                 `json:"type"`
+	Config map[string]interface{} `json:"config"`
+}
+
+// APIConfig represents an API configuration from the starter config
+// Example: { "name": "graphql", "type": "GraphQL", "config": { "listen": ":8080" } }
+type APIConfig struct {
+	Name   string                 `json:"name"`
+	Type   string                 `json:"type"`
+	Config map[string]interface{} `json:"config"`
+}
+
 // StarterConfig holds the structure for the starter JSON config
 // Only index config is used for now, but features can be extended
 // as needed.
 type StarterConfig struct {
-	Indexes []IndexConfig `json:"indexes"`
-	Loaders []LoaderConfig `json:"loaders"`
-	Apis    []APIConfig    `json:"apis"`
+	Index   map[string]interface{} `json:"indexes"`
+	Loaders []LoaderConfig         `json:"loaders"`
+	Apis    []APIConfig            `json:"apis"`
 	// Features map[string]features.ExtractorConfig `json:"features"` // Uncomment if you want to support feature config
 }
 
