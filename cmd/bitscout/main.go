@@ -73,7 +73,9 @@ func (a *filesystemLoaderAdapter) Load(source string) ([]interface{}, error) {
 // Only index config is used for now, but features can be extended
 // as needed.
 type StarterConfig struct {
-	Index map[string]interface{} `json:"index"`
+	Indexes []IndexConfig `json:"indexes"`
+	Loaders []LoaderConfig `json:"loaders"`
+	Apis    []APIConfig    `json:"apis"`
 	// Features map[string]features.ExtractorConfig `json:"features"` // Uncomment if you want to support feature config
 }
 
