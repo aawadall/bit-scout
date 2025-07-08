@@ -1,0 +1,52 @@
+type Query {
+    ping: PingResult!
+    stats: StatsResult!
+    search(query: QueryInput!): SearchResult!
+}
+
+type Mutation {
+    start: CommandResult!
+    stop: CommandResult!
+    index(document: DocumentInput!): CommandResult!
+}
+
+type PingResult {
+    pong: String!
+}
+
+type StatsResult {
+    numDocuments: Integer!
+}
+
+type CommandResult {
+    error: String
+}
+
+input QueryInput {
+    query: String!
+}
+
+input DocumentInput {
+    id: ID
+    text: String
+    source: String
+    vector: [Float!]
+    meta: JSON
+}
+
+scalar JSON
+
+type SearchResult {
+    results: [Document!]!
+    totalCount: Int!
+    error: String
+}
+
+type Document {
+    id: ID
+    text: String
+    source: String
+    vector: [Float!]
+    meta: JSON
+}
+

@@ -5,20 +5,49 @@ package api
 import (
 	"errors"
 
+	// Add GraphQL library import
+	"github.com/graphql-go/graphql"
+
 	"github.com/aawadall/bit-scout/internal/models"
 	"github.com/aawadall/bit-scout/internal/ports"
 )
 
 // GraphQLAPI is a minimal implementation of the APIPort interface for GraphQL.
-type GraphQLAPI struct{}
+type GraphQLAPI struct {
+	schema *graphql.Schema
+}
+
+// Define a minimal GraphQL schema as a string or using graphql-go types
+var rootQuery = graphql.NewObject(graphql.ObjectConfig{
+	Name: "Query",
+	Fields: graphql.Fields{
+		// Example: add a simple 'ping' field
+		"ping": &graphql.Field{
+			Type: graphql.String,
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return "pong", nil
+			},
+		},
+	},
+})
 
 func (g *GraphQLAPI) Name() string {
 	return "GraphQL"
 }
 
 func (g *GraphQLAPI) Start() error {
-	// TODO: Implement GraphQL server startup
-	return errors.New("GraphQL Start not implemented")
+	// Initialize the GraphQL schema
+	schema, err := graphql.NewSchema(graphql.SchemaConfig{
+		Query: rootQuery,
+		// Mutation: rootMutation, // Add if needed
+	})
+	if err != nil {
+		return err
+	}
+	g.schema = &schema
+
+	// TODO: Implement GraphQL server startup (HTTP handler, etc.)
+	return errors.New("GraphQL Start not fully implemented: server setup pending")
 }
 
 func (g *GraphQLAPI) Stop() error {
