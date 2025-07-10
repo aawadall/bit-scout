@@ -3,11 +3,16 @@ package api
 // GraphQL Implementation to API port
 
 import (
+	"context"
 	"errors"
+	"log"
+	"net/http"
 
 	// Add GraphQL library import
+	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/graphql-go/graphql"
 
+	"github.com/aawadall/bit-scout/internal/api/generated"
 	"github.com/aawadall/bit-scout/internal/models"
 	"github.com/aawadall/bit-scout/internal/ports"
 )
@@ -46,8 +51,10 @@ func (g *GraphQLAPI) Start() error {
 	}
 	g.schema = &schema
 
-	// TODO: Implement GraphQL server startup (HTTP handler, etc.)
-	return errors.New("GraphQL Start not fully implemented: server setup pending")
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: g}))
+	http.Handle("/query", srv)
+	log.Println("GraphQL server running at http://localhost:8080/query")
+	return http.ListenAndServe(":8080", nil)
 }
 
 func (g *GraphQLAPI) Stop() error {
@@ -68,4 +75,23 @@ func (g *GraphQLAPI) Stats() (ports.Stats, error) {
 func (g *GraphQLAPI) Index(doc models.Document) error {
 	// TODO: Implement GraphQL index
 	return errors.New("GraphQL Index not implemented")
+}
+
+type resolver struct {
+	api ports.API
+}
+
+func (r *resolver) Query() generated.QueryResolver {
+	return &queryResolver{r}
+}
+
+type queryResolver struct{ *resolver }
+
+func (r *queryResolver) Ping(ctx context.Context) (*generated.PingResult, error) {
+	// Call your API port implementation
+	pong, err := r.api.Ping(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &generated.PingResult{Pong: pong}, nil
 }
