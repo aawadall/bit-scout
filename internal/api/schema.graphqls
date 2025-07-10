@@ -15,7 +15,7 @@ type PingResult {
 }
 
 type StatsResult {
-    numDocuments: Integer!
+    numDocuments: Int!
 }
 
 type CommandResult {
